@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#173c2b">
+    <meta name="description" content="SmartFarm connects Kenyan farmers with buyers and helps manage products, orders, and subscriptions.">
+    <title>SmartFarm | Grow together</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="database.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Main navigation">
+            <a class="brand" href="#overview" data-view-link="overview" aria-label="SmartFarm home">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="brand-name">smart<span>farm</span><small>GROW TOGETHER</small></span>
+            </a>
+            <div class="workspace-label">WORKSPACE</div>
+            <nav class="side-nav">
+                <a class="nav-link active" href="#overview" data-view-link="overview"><span class="nav-icon">01</span>Overview</a>
+                <a class="nav-link" href="#marketplace" data-view-link="marketplace"><span class="nav-icon">02</span>Marketplace</a>
+                <a class="nav-link" href="#my-farm" data-view-link="my-farm"><span class="nav-icon">03</span>My farm</a>
+                <a class="nav-link" href="#orders" data-view-link="orders"><span class="nav-icon">04</span>Orders <span class="nav-count">3</span></a>
+                <a class="nav-link" href="#advertise" data-view-link="advertise"><span class="nav-icon">05</span>Advertise</a>
+                <a class="nav-link" href="#subscription" data-view-link="subscription"><span class="nav-icon">06</span>Subscription</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="help-note">
+                    <span class="help-kicker">NEED A HAND?</span>
+                    <p>Talk to our team about your farm.</p>
+                    <div class="help-contact-links">
+                        <a class="help-contact-link" href="tel:+254706554354">Call 0706554354</a>
+                        <a class="help-contact-link" href="mailto:rmutwiri25@gmail.com">rmutwiri25@gmail.com</a>
+                        <a class="help-whatsapp" href="https://wa.me/254706554354?text=Hello%20SmartFarm%2C%20I%20need%20some%20help." target="_blank" rel="noopener noreferrer" aria-label="Chat with SmartFarm on WhatsApp">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8.2 8.2 0 0 1-12.1 7.2L4 20l1.3-3.5A8.2 8.2 0 1 1 20 11.5Z"/><path d="M9 8.2c.3 2.7 2.4 4.8 5.1 5.1l1.2-1.2 2 1c-.1 1.2-.8 2-1.9 2-3.8 0-7.7-3.9-7.7-7.7 0-1.1.8-1.8 2-1.9l1 2L9 8.2Z"/></svg>
+                            <span>Message on WhatsApp</span><span aria-hidden="true">&#8599;</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="account-chip">
+                    <span class="avatar avatar-owner" id="account-avatar">SF</span>
+                    <span class="account-name"><strong id="account-name">Guest visitor</strong><small id="account-email">Sign in to sell</small></span>
+                    <span class="account-dots" aria-hidden="true">&#8942;</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-area">
+            <header class="topbar">
+                <div class="breadcrumb"><span>SmartFarm</span><span class="crumb-slash">/</span><strong id="page-crumb">Overview</strong></div>
+                <div class="topbar-actions">
+                    <span class="location-pill"><span class="location-dot"></span> Meru, Kenya</span>
+                    <button class="icon-button notification-button" id="notifications-button" type="button" aria-label="Show notifications"><span aria-hidden="true">&#9678;</span><i></i></button>
+                    <button class="account-button" id="account-button" type="button">Sign in</button>
+                    <a class="top-whatsapp" href="https://wa.me/254706554354" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">&#8599;</span> Contact us</a>
+                </div>
+            </header>
+
+            <div class="view-container">
+                <section class="view active" id="view-overview" data-view="overview">
+                    <div class="welcome-row">
+                        <div><p class="eyebrow">WEDNESDAY, 30 SEPTEMBER 2026 <span class="eyebrow-line"></span> MERU COUNTY</p><h1>Your farm, <em>in good hands.</em></h1><p class="welcome-copy">A clear view of your business, your products, and what is growing next.</p></div>
+                        <button class="button button-dark" type="button" data-open-view="advertise"><span aria-hidden="true">+</span> List a product</button>
+                    </div>
+
+                    <div class="overview-hero">
+                        <div class="hero-copy"><span class="hero-tag"><span></span> YOUR FARM AT A GLANCE</span><h2>Good things<br>are <em>growing.</em></h2><p>Keep your stock moving and your farm business growing, one harvest at a time.</p><button class="hero-link" type="button" data-open-view="my-farm">Manage your farm <span aria-hidden="true">&#8594;</span></button></div>
+                        <div class="hero-photo" role="img" aria-label="Fresh green crops growing in a Kenyan farm"><div class="photo-caption"><span>01 / THIS SEASON</span><strong>Grown with care in Meru</strong></div></div>
+                        <div class="hero-stamp" aria-hidden="true"><span>HARVEST</span><strong>+</strong><span>OPPORTUNITY</span></div>
+                    </div>
+
+                    <div class="section-heading metrics-heading"><div><p class="section-kicker">THE NUMBERS THAT MATTER</p><h2>Business snapshot</h2></div><span class="period-label">SEPTEMBER 2026 <span aria-hidden="true">&#8964;</span></span></div>
+                    <div class="metrics-grid">
+                        <article class="metric-card metric-primary"><div class="metric-top"><span>Sales this month</span><span class="metric-glyph">KSh</span></div><strong class="metric-value" id="sales-total">KSh 85,000</strong><div class="metric-foot"><span class="trend-up">Live total</span><span>from recorded sales</span></div><div class="metric-sparkline" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+                        <article class="metric-card"><div class="metric-top"><span>Farm expenses</span><span class="metric-icon">&#8599;</span></div><strong class="metric-value" id="expenses-total">KSh 32,400</strong><div class="metric-foot"><span class="metric-neutral" id="expense-record-count">2 records</span><span>this month</span></div><div class="metric-progress"><span id="expense-progress" style="width: 38%"></span></div><div class="metric-sub" id="expense-ratio">38% of sales revenue</div></article>
+                        <article class="metric-card"><div class="metric-top"><span>Net farm income</span><span class="metric-icon">&#8599;</span></div><strong class="metric-value" id="profit-total">KSh 52,600</strong><div class="metric-foot"><span class="trend-up">Calculated</span><span>sales less expenses</span></div><div class="income-bars" aria-label="Income trend"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+                        <article class="metric-card"><div class="metric-top"><span>Active products</span><span class="metric-icon">&#8599;</span></div><strong class="metric-value" id="active-product-count">12</strong><div class="metric-foot"><span class="metric-neutral">Across 4 categories</span></div><div class="category-dots" aria-label="4 product categories"><i></i><i></i><i></i><i></i><span>4 categories</span></div></article>
+                    </div>
+
+                    <div class="dashboard-lower">
+                        <section class="panel latest-panel"><div class="panel-heading"><div><p class="section-kicker">FRESH FROM THE MARKET</p><h2>Products to discover</h2></div><button class="text-action" type="button" data-open-view="marketplace">Explore all <span aria-hidden="true">&#8594;</span></button></div><div class="mini-products" id="overview-products"></div></section>
+                        <aside class="panel activity-panel"><div class="panel-heading"><div><p class="section-kicker">A LITTLE HEADS-UP</p><h2>Farm alerts</h2></div><span class="alert-indicator">2</span></div><div class="alert-item"><span class="alert-symbol stock-symbol">!</span><div><strong>Stock running low</strong><p>Your avocado stock is down to 8 crates.</p><small>Today, 9:14 am</small></div></div><div class="alert-item"><span class="alert-symbol order-symbol">&#8593;</span><div><strong>New order received</strong><p>Order #SF-2409 needs your attention.</p><small>Today, 8:42 am</small></div></div><button class="alerts-link" type="button" data-open-view="orders">View order activity <span aria-hidden="true">&#8594;</span></button></aside>
+                    </div>
+                    <footer class="page-footer"><span>SMARTFARM <span class="footer-dot"></span> GROW TOGETHER</span><span>Built for the people who feed us.</span><span>KENYA <span aria-hidden="true">&#8599;</span></span></footer>
+                </section>
+
+                <section class="view" id="view-marketplace" data-view="marketplace">
+                    <div class="page-intro"><div><p class="eyebrow">GOOD FOOD. GOOD PEOPLE. <span class="eyebrow-line"></span> ACROSS KENYA</p><h1>The <em>marketplace.</em></h1><p class="welcome-copy">Find fresh produce, livestock, and farm services from local sellers.</p></div><button class="button button-dark" type="button" data-open-view="advertise"><span aria-hidden="true">+</span> Sell on SmartFarm</button></div>
+                    <div class="market-feature"><div><span class="hero-tag"><span></span> SMARTFARM WHOLESALE</span><h2>From our farm<br>to your <em>table.</em></h2><p>Browse products grown and selected by our own team in Meru.</p><button class="hero-link" type="button" data-filter-seller="SmartFarm Wholesale">Shop our harvest <span aria-hidden="true">&#8594;</span></button></div><div class="market-feature-image" role="img" aria-label="Fresh produce harvested from a farm"></div><span class="market-feature-note">DIRECT FROM THE FARM <span>MERU, KENYA</span></span></div>
+                    <div class="market-toolbar"><label class="search-field"><span aria-hidden="true">&#9906;</span><input id="product-search" type="search" placeholder="Search maize, avocados, services..." aria-label="Search products"></label><label class="select-field"><span>Category</span><select id="category-filter" aria-label="Filter by category"><option value="all">All products</option><option value="Cereals">Cereals</option><option value="Vegetables">Vegetables</option><option value="Fruits">Fruits</option><option value="Livestock">Livestock</option><option value="Flowers">Flowers</option><option value="Services">Services</option></select></label><label class="select-field"><span>Location</span><select id="location-filter" aria-label="Filter by county"><option value="all">All Kenya</option><option value="Meru">Meru</option><option value="Nairobi">Nairobi</option><option value="Kiambu">Kiambu</option><option value="Nyeri">Nyeri</option></select></label></div>
+                    <div class="market-results"><div class="results-label"><span id="results-count">6 products</span><span>Fresh listings from Kenyan sellers</span></div><div class="product-grid" id="market-product-grid"></div><div class="empty-state" id="empty-state" hidden><strong>No products found just yet.</strong><span>Try another search or choose a different location.</span></div></div>
+                </section>
+
+                <section class="view" id="view-my-farm" data-view="my-farm">
+                    <div class="page-intro"><div><p class="eyebrow">YOUR BUSINESS <span class="eyebrow-line"></span> MERU, KENYA</p><h1>Welcome to <em>your farm.</em></h1><p class="welcome-copy">Keep stock up to date, track your products, and make every harvest count.</p></div><button class="button button-dark" type="button" data-open-view="advertise"><span aria-hidden="true">+</span> Add a product</button></div>
+                    <div class="seller-cover"><div class="seller-monogram">SF</div><div class="seller-cover-copy"><span class="verified-badge"><span>&#10003;</span> PLATFORM STORE</span><h2>SmartFarm Wholesale</h2><p>Farm fresh, thoughtfully grown. Proudly rooted in Meru County.</p></div><a class="seller-contact-link" href="https://wa.me/254706554354?text=Hello%20SmartFarm%20Wholesale%2C%20I%20would%20like%20to%20ask%20about%20your%20products." target="_blank" rel="noopener noreferrer">Contact on WhatsApp <span aria-hidden="true">&#8599;</span></a></div>
+                    <div class="seller-stats"><div><span>LISTED PRODUCTS</span><strong id="farm-product-count">12</strong></div><div><span>THIS MONTH'S SALES</span><strong>KSh 85,000</strong></div><div><span>SELLER RATING</span><strong>4.8 <span class="rating-star">&#9733;</span></strong></div><div><span>SELLER STATUS</span><strong class="status-active"><i></i> Active</strong></div></div>
+                    <div class="panel inventory-panel"><div class="panel-heading"><div><p class="section-kicker">YOUR CURRENT LISTINGS</p><h2>Product inventory</h2></div><div class="inventory-actions"><span class="inventory-status"><i></i> Stock levels current</span><button class="button button-outline" type="button" data-open-view="advertise"><span aria-hidden="true">+</span> Add product</button></div></div><div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>AVAILABLE STOCK</th><th>PRICE</th><th>STATUS</th></tr></thead><tbody id="inventory-body"></tbody></table></div></div>
+                      <section class="panel ledger-panel"><div class="panel-heading"><div><p class="section-kicker">KEEP YOUR BOOKS CURRENT</p><h2>Record a sale or expense</h2></div><span class="demo-label">ON-DEVICE DATABASE</span></div><form class="ledger-form" id="transaction-form"><label>Type<select name="type"><option value="sale">Sale</option><option value="expense">Expense</option></select></label><label>Amount (KSh)<input name="amount" type="number" min="1" step="1" placeholder="e.g. 2500" required></label><label>What was it for?<input name="note" maxlength="70" placeholder="e.g. Maize sales, seeds" required></label><button class="button button-dark" type="submit">Add record <span aria-hidden="true">+</span></button></form><div class="ledger-list" id="transaction-list"></div></section>
+                      <div class="info-note"><span class="info-note-mark">i</span><p>Your published products are shared with marketplace visitors. Sales and expense records remain saved only in this browser.</p></div>
+                </section>
+
+                <section class="view" id="view-orders" data-view="orders">
+                    <div class="page-intro"><div><p class="eyebrow">KEEP THINGS MOVING <span class="eyebrow-line"></span> YOUR STORE</p><h1>Orders & <em>activity.</em></h1><p class="welcome-copy">Follow each order from first hello to happy delivery.</p></div><a class="button button-outline" href="mailto:rmutwiri25@gmail.com?subject=SmartFarm%20order%20support">Order support <span aria-hidden="true">&#8599;</span></a></div>
+                    <div class="order-summary"><div><span>NEEDS YOUR ATTENTION</span><strong>2</strong><small>Pending confirmation</small></div><div><span>IN PROGRESS</span><strong>1</strong><small>Being prepared</small></div><div><span>COMPLETED THIS MONTH</span><strong>28</strong><small>Nice work</small></div><div><span>SALES THIS MONTH</span><strong>KSh 85,000</strong><small>Across 31 orders</small></div></div>
+                    <div class="panel orders-panel"><div class="panel-heading"><div><p class="section-kicker">RECENT ACTIVITY</p><h2>Order management</h2></div><label class="order-filter"><span class="sr-only">Filter orders</span><select id="order-filter"><option value="all">All orders</option><option value="Pending">Pending</option><option value="Confirmed">Confirmed</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select></label></div><div class="order-list" id="order-list"></div></div>
+                    <div class="info-note"><span class="info-note-mark">i</span><p>Sample orders are shown for demonstration. Customer checkout, delivery tracking, and live notifications need a connected backend.</p></div>
+                </section>
+
+                <section class="view" id="view-advertise" data-view="advertise">
+                    <div class="page-intro"><div><p class="eyebrow">GROW YOUR CUSTOMER BASE <span class="eyebrow-line"></span> SELL ON SMARTFARM</p><h1>Put your harvest <em>out there.</em></h1><p class="welcome-copy">Create a clear listing and connect with buyers across Kenya.</p></div><span class="duration-note"><span>&#9679;</span> 30-DAY LISTING</span></div>
+                      <div class="advertise-layout"><form class="panel advertise-form" id="advert-form"><div class="form-heading"><span class="form-step">01</span><div><p class="section-kicker">YOUR LISTING</p><h2>Tell buyers about it</h2></div></div><div class="form-grid"><label class="form-field field-wide">Product name<input name="name" placeholder="e.g. Fresh Hass avocados" required maxlength="70"></label><label class="form-field">Category<select name="category" required><option value="">Choose a category</option><option>Cereals</option><option>Vegetables</option><option>Fruits</option><option>Livestock</option><option>Flowers</option><option>Services</option></select></label><label class="form-field">County or town<input name="location" placeholder="e.g. Meru" required maxlength="50"></label><label class="form-field">Price (KSh)<div class="input-prefix"><span>KSh</span><input name="price" type="number" min="1" step="1" placeholder="5000" required></div></label><label class="form-field">Unit<select name="unit"><option>per bag</option><option>per kg</option><option>per crate</option><option>per piece</option><option>per animal</option><option>per service</option><option>per bunch</option></select></label><label class="form-field">Available quantity<input name="quantity" type="number" min="1" step="1" placeholder="50" required></label><label class="form-field">Seller or farm name<input name="seller" placeholder="e.g. Green Valley Farm" required maxlength="60"></label><label class="form-field field-wide">A few details<textarea name="description" rows="3" maxlength="220" placeholder="Tell buyers what makes this produce special."></textarea></label><label class="form-field field-wide">Product photo<span class="upload-field"><input id="product-photo" type="file" accept="image/*"><span>Choose a product photo</span><small>Images only · up to 1.5 MB in this demo</small></span></label></div><div class="form-foot"><p>Your listing will appear as a local preview. A live account and moderation process will be needed to publish it to all users.</p><button class="button button-dark" type="submit">Preview listing <span aria-hidden="true">&#8594;</span></button></div></form>
+                        <aside class="advertise-aside"><div class="listing-preview"><div class="preview-photo" role="img" aria-label="Fresh produce"><span>LISTING PREVIEW</span></div><div class="preview-content"><span class="preview-category" id="preview-category">YOUR CATEGORY</span><h3 id="preview-name">Your product name</h3><p id="preview-location">Your location, Kenya</p><div class="preview-price" id="preview-price">KSh 0 <span>/ unit</span></div><div class="preview-seller"><span class="avatar avatar-preview">SF</span><span><strong id="preview-seller">Your farm</strong><small>SmartFarm seller</small></span><span class="verified-check">&#10003;</span></div></div></div><div class="listing-tip"><span>GOOD LISTINGS TRAVEL</span><p>Clear prices, honest quantities, and a great photo help buyers feel confident.</p></div></aside></div>
+                </section>
+
+                <section class="view" id="view-subscription" data-view="subscription">
+                    <div class="page-intro"><div><p class="eyebrow">A PLAN THAT GROWS WITH YOU <span class="eyebrow-line"></span> SMARTFARM SELLER</p><h1>Make room to <em>grow.</em></h1><p class="welcome-copy">Choose the listing plan that suits your season. All prices are in Kenyan shillings.</p></div><span class="subscription-status"><i></i> Demo account</span></div>
+                    <div class="subscription-banner"><div><span class="hero-tag"><span></span> SIMPLE. CLEAR. LOCAL.</span><h2>Your next harvest<br>has an <em>audience.</em></h2></div><p>Start with a few listings and expand when you're ready. You stay in control of your plan.</p><span class="subscription-mark" aria-hidden="true">SF</span></div>
+                    <div class="billing-toggle" role="group" aria-label="Billing frequency"><button class="billing-choice active" type="button" data-billing="monthly" aria-pressed="true">Monthly</button><button class="billing-choice" type="button" data-billing="annual" aria-pressed="false">Annual <span>Save 15%</span></button></div>
+                    <div class="plan-grid" id="plan-grid"></div>
+                    <div class="payment-disclosure"><span class="info-note-mark">i</span><p><strong>Payments aren't connected yet.</strong> Your M-Pesa contact is <strong>Raphael Ngai · 0706 554 354</strong>. Live STK Push, automatic activation, receipts, renewals, and payment history require a secure server and Safaricom Daraja integration. Never send payment credentials through this demo.</p></div>
+                    <div class="panel subscription-history"><div class="panel-heading"><div><p class="section-kicker">YOUR ACCOUNT</p><h2>Subscription activity</h2></div><span class="demo-label">LOCAL DEMO</span></div><div id="subscription-activity"><p class="history-empty">No subscription requests yet.</p></div></div>
+                </section>
+
+                <footer class="page-footer mobile-footer"><span>SMARTFARM <span class="footer-dot"></span> GROW TOGETHER</span><a href="tel:+254706554354">0706554354</a><a href="mailto:rmutwiri25@gmail.com">rmutwiri25@gmail.com</a><a href="https://wa.me/254706554354?text=Hello%20SmartFarm" target="_blank" rel="noopener noreferrer">WhatsApp <span aria-hidden="true">&#8599;</span></a></footer>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <dialog class="account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+        <button class="dialog-close" id="account-close" type="button" aria-label="Close account dialog">&#10005;</button>
+        <div class="account-dialog-content">
+            <p class="section-kicker">SMARTFARM SELLER ACCOUNT</p>
+            <h2 id="account-dialog-title">Sign in</h2>
+            <p class="auth-description" id="auth-description">Sign in to manage your farm and publish products to the shared marketplace.</p>
+            <form class="auth-form" id="auth-form">
+                <label class="form-field" id="auth-name-field" hidden>Farm or seller name<input name="name" autocomplete="organization" maxlength="60"></label>
+                <label class="form-field">Email address<input name="email" type="email" autocomplete="email" maxlength="180" required></label>
+                <label class="form-field">Password<input name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label>
+                <button class="button button-dark" id="auth-submit" type="submit">Sign in</button>
+            </form>
+            <button class="auth-toggle" id="auth-toggle" type="button">New to SmartFarm? Create an account</button>
+            <div class="account-signed-in" id="account-signed-in" hidden>
+                <p>Signed in as <strong id="signed-in-email"></strong></p>
+                <button class="button button-outline" id="sign-out-button" type="button">Sign out</button>
+            </div>
+        </div>
+    </dialog>
+    <dialog class="product-dialog" id="product-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="Close product details">&#10005;</button><div class="dialog-image" id="dialog-image"></div><div class="dialog-body"><span class="preview-category" id="dialog-category"></span><h2 id="dialog-title"></h2><p class="dialog-description" id="dialog-description"></p><div class="dialog-detail-row"><span>SELLER</span><strong id="dialog-seller"></strong></div><div class="dialog-detail-row"><span>LOCATION</span><strong id="dialog-location"></strong></div><div class="dialog-detail-row"><span>AVAILABLE</span><strong id="dialog-stock"></strong></div><div class="dialog-price" id="dialog-price"></div><button class="button button-outline share-product" id="copy-product-link" type="button">Copy product link <span aria-hidden="true">&#8599;</span></button><a class="button button-whatsapp" id="dialog-whatsapp" href="#" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">&#8599;</span> Ask about this product on WhatsApp</a><small class="dialog-note">You'll be contacting SmartFarm at 0706 554 354 to ask about this listing.</small></div></dialog>
+</body>
+</html>
