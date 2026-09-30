@@ -2,6 +2,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { createStore } = require('./storage');
 
 const SESSION_COOKIE = 'smartfarm_session';
 const SESSION_TTL = 30 * 24 * 60 * 60 * 1000;
@@ -76,55 +77,30 @@ function cookieOptions(request) {
 }
 
 function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__dirname, 'data') } = {}) {
-  fs.mkdirSync(dataDir, { recursive: true });
-  const dataFile = path.join(dataDir, 'smartfarm.json');
-  let store;
-  try {
-    store = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-  } catch (error) {
-    if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error;
-    store = { users: [], products: [], sessions: {} };
-  }
-  store.users ||= [];
-  store.products ||= [];
-  store.sessions ||= {};
-
-  function persist() {
-    const temporaryFile = `${dataFile}.${process.pid}.tmp`;
-    fs.writeFileSync(temporaryFile, JSON.stringify(store), { mode: 0o600 });
-    fs.renameSync(temporaryFile, dataFile);
-  }
+  const store = createStore(dataDir);
 
   function currentUser(request) {
     const token = cookieToken(request);
     if (!token) return null;
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-    const session = store.sessions[tokenHash];
-    if (!session) return null;
-    if (session.expiresAt <= Date.now()) {
-      delete store.sessions[tokenHash];
-      persist();
-      return null;
-    }
-    return store.users.find((user) => user.id === session.userId) || null;
+    return store.getSessionUser(tokenHash);
   }
 
   function createSession(response, request, user) {
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = Date.now() + SESSION_TTL;
-    store.sessions[crypto.createHash('sha256').update(token).digest('hex')] = { userId: user.id, expiresAt };
-    persist();
+    store.saveSession(crypto.createHash('sha256').update(token).digest('hex'), user.id, expiresAt);
     response.setHeader('set-cookie', `${SESSION_COOKIE}=${token}; ${cookieOptions(request)}; Max-Age=${SESSION_TTL / 1000}`);
   }
 
   async function handleApi(request, response, url) {
     if (request.method === 'GET' && url.pathname === '/api/session') {
-      return sendJson(response, 200, { user: currentUser(request) && safeUser(currentUser(request)) });
+      const user = currentUser(request);
+      return sendJson(response, 200, { user: user && safeUser(user) });
     }
 
     if (request.method === 'GET' && url.pathname === '/api/products') {
-      const products = [...store.products].sort((left, right) => right.createdAt - left.createdAt);
-      return sendJson(response, 200, { products });
+      return sendJson(response, 200, { products: store.listProducts() });
     }
 
     if (request.method === 'POST' && url.pathname === '/api/register') {
@@ -135,10 +111,10 @@ function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__
       if (name.length < 2 || name.length > 60) throw httpError(400, 'Enter a farm or seller name between 2 and 60 characters.');
       if (email.length > 180 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw httpError(400, 'Enter a valid email address.');
       if (password.length < 8 || password.length > 128) throw httpError(400, 'Use a password between 8 and 128 characters.');
-      if (store.users.some((user) => user.email === email)) throw httpError(409, 'An account with this email already exists.');
+      if (store.getUserByEmail(email)) throw httpError(409, 'An account with this email already exists.');
       const salt = crypto.randomBytes(16).toString('hex');
       const user = { id: crypto.randomUUID(), name, email, salt, passwordHash: hashPassword(password, salt), createdAt: Date.now() };
-      store.users.push(user);
+      store.createUser(user);
       createSession(response, request, user);
       return sendJson(response, 201, { user: safeUser(user) });
     }
@@ -147,7 +123,7 @@ function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__
       const body = await readJson(request);
       const email = String(body.email || '').trim().toLowerCase();
       const password = String(body.password || '');
-      const user = store.users.find((candidate) => candidate.email === email);
+      const user = store.getUserByEmail(email);
       const passwordHash = user ? hashPassword(password, user.salt) : '';
       const valid = user && passwordHash.length === user.passwordHash.length
         && crypto.timingSafeEqual(Buffer.from(passwordHash), Buffer.from(user.passwordHash));
@@ -158,8 +134,7 @@ function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__
 
     if (request.method === 'POST' && url.pathname === '/api/logout') {
       const token = cookieToken(request);
-      if (token) delete store.sessions[crypto.createHash('sha256').update(token).digest('hex')];
-      persist();
+      if (token) store.deleteSession(crypto.createHash('sha256').update(token).digest('hex'));
       response.setHeader('set-cookie', `${SESSION_COOKIE}=; ${cookieOptions(request)}; Max-Age=0`);
       return sendJson(response, 200, { user: null });
     }
@@ -201,15 +176,14 @@ function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__
         ownerId: user.id,
         createdAt: Date.now()
       };
-      store.products.push(product);
-      persist();
+      store.createProduct(product);
       return sendJson(response, 201, { product });
     }
 
     return sendJson(response, 404, { error: 'API route not found.' });
   }
 
-  return http.createServer(async (request, response) => {
+  const server = http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, 'http://localhost');
       if (url.pathname.startsWith('/api/')) return await handleApi(request, response, url);
@@ -229,6 +203,8 @@ function createServer({ dataDir = process.env.SMARTFARM_DATA_DIR || path.join(__
       sendJson(response, error.status || 500, { error: error.status ? error.message : 'The server could not complete the request.' });
     }
   });
+  server.once('close', () => store.close());
+  return server;
 }
 
 if (require.main === module) {

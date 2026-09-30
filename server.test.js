@@ -1,7 +1,9 @@
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { DatabaseSync } = require('node:sqlite');
 const { after, before, test } = require('node:test');
 const { createServer } = require('./server');
 
@@ -79,5 +81,78 @@ test('accounts persist and can sign in again', async () => {
     assert.equal(products.some((product) => product.seller === 'Green Valley Farm'), true);
   } finally {
     await new Promise((resolve, reject) => restartedServer.close((error) => error ? reject(error) : resolve()));
+  }
+});
+
+test('stores accounts and adverts in relational SQLite tables', () => {
+  const database = new DatabaseSync(path.join(dataDir, 'smartfarm.sqlite'));
+  try {
+    const tables = database.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all().map((row) => row.name);
+    assert.deepEqual(tables.sort(), ['migrations', 'products', 'sessions', 'users']);
+    assert.equal(database.prepare('SELECT COUNT(*) AS count FROM products').get().count, 1);
+    assert.equal(database.prepare('SELECT COUNT(*) AS count FROM users').get().count, 1);
+  } finally {
+    database.close();
+  }
+});
+
+test('imports legacy JSON accounts, sessions, and adverts without deleting the backup', async () => {
+  const legacyDir = fs.mkdtempSync(path.join(os.tmpdir(), 'smartfarm-legacy-'));
+  const legacyFile = path.join(legacyDir, 'smartfarm.json');
+  const salt = crypto.randomBytes(16).toString('hex');
+  const sessionToken = crypto.randomBytes(32).toString('hex');
+  const user = {
+    id: 'legacy-user-1',
+    name: 'Legacy Farm',
+    email: 'legacy@example.com',
+    salt,
+    passwordHash: crypto.scryptSync('legacy-pass-123', salt, 64).toString('hex'),
+    createdAt: Date.now()
+  };
+  const product = {
+    id: 'legacy-product-1',
+    name: 'Legacy tomatoes',
+    category: 'Vegetables',
+    location: 'Meru',
+    seller: user.name,
+    price: 700,
+    unit: 'per crate',
+    quantity: 12,
+    description: 'Imported from the previous data store.',
+    image: 'https://images.unsplash.com/legacy.jpg',
+    ownerId: user.id,
+    createdAt: Date.now()
+  };
+  fs.writeFileSync(legacyFile, JSON.stringify({
+    users: [user],
+    products: [product],
+    sessions: {
+      [crypto.createHash('sha256').update(sessionToken).digest('hex')]: {
+        userId: user.id,
+        expiresAt: Date.now() + 60_000
+      }
+    }
+  }));
+
+  const migrationServer = createServer({ dataDir: legacyDir });
+  await new Promise((resolve) => migrationServer.listen(0, '127.0.0.1', resolve));
+  try {
+    const migrationUrl = `http://127.0.0.1:${migrationServer.address().port}`;
+    const productsResponse = await fetch(`${migrationUrl}/api/products`);
+    const products = (await productsResponse.json()).products;
+    assert.equal(products.some((item) => item.id === product.id), true);
+
+    const sessionResponse = await fetch(`${migrationUrl}/api/session`, {
+      headers: { cookie: `smartfarm_session=${sessionToken}` }
+    });
+    assert.deepEqual((await sessionResponse.json()).user, {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    });
+    assert.equal(fs.existsSync(legacyFile), true);
+  } finally {
+    await new Promise((resolve, reject) => migrationServer.close((error) => error ? reject(error) : resolve()));
+    fs.rmSync(legacyDir, { recursive: true, force: true });
   }
 });

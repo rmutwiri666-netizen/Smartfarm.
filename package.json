@@ -4,7 +4,7 @@
   "private": true,
   "description": "SmartFarm shared marketplace with seller accounts",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.5.0"
   },
   "scripts": {
     "start": "node server.js",
